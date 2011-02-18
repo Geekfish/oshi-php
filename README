@@ -1,0 +1,31 @@
+///////////////
+//   NOTES   //
+///////////////
+
+Session Cookies:
+
+Session variables are only used in this class
+as the PHP SOAP server does not allow their usage in other classes
+even if they are being instanciated and used within it.
+Poshi mostly works as a function set to be given to server config
+rather than a real class.
+
+Clients:
+
+All compatible clients should be able to recieve
+and send cookies in order to be compatible with
+this SOAP service.
+
+Wrapper Classes:
+
+Most of the objects used server-side cannot be directly sent to the clients
+as the soap server shares both public and private properties without distinction.
+Wrappers ( eg GameWrapper ) are used to expose only the desired variables while the actual
+classes are only used internaly.
+
+Caching:
+
+Server side caching of the WSDL file has been disabled
+during the project's development and testing.
+A more appropriate configuration should be necessary when the project
+goes in production mode. 

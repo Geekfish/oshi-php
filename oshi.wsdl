@@ -1,0 +1,336 @@
+<?xml version="1.0" ?>
+<definitions name="Oshi"
+             targetNamespace="urn:Oshi" 
+             xmlns:typens="urn:Oshi"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+             xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+             xmlns="http://schemas.xmlsoap.org/wsdl/">
+	<types>
+		<xsd:schema targetNamespace="urn:Oshi">
+		
+			<xsd:complexType name="UserCredentials">
+              <xsd:all>
+                  <xsd:element name="Email" type="xsd:string"/>
+                  <xsd:element name="Password" type="xsd:string"/>
+              </xsd:all>
+            </xsd:complexType>
+			
+			<xsd:complexType name="UserWrapper">
+              <xsd:all>
+                  <xsd:element name="Id" type="xsd:int"/>
+                  <xsd:element name="Name" type="xsd:string"/>
+				  <xsd:element name="IsOnline" type="xsd:boolean"/>
+				  <xsd:element name="IsInGame" type="xsd:boolean"/>
+				  <xsd:element name="LastLogin" type="xsd:string"/>
+				  <xsd:element name="LastPing" type="xsd:string"/>
+              </xsd:all>
+            </xsd:complexType>
+			
+			
+			<xsd:complexType name="PawnWrapper">
+              <xsd:all>
+                  <xsd:element name="Id" type="xsd:int"/>
+                  <xsd:element name="StartX" type="xsd:int"/>
+				  <xsd:element name="StartY" type="xsd:int"/>
+				  <xsd:element name="Power" type="xsd:int"/>
+				  <xsd:element name="Owner" type="xsd:int"/>
+              </xsd:all>
+            </xsd:complexType>
+			
+			<xsd:complexType name="PawnigWrapper">
+              <xsd:all>
+                  <xsd:element name="Id" type="xsd:int"/>
+                  <xsd:element name="GameId" type="xsd:int"/>
+				  <xsd:element name="X" type="xsd:int"/>
+				  <xsd:element name="Y" type="xsd:int"/>
+				  <xsd:element name="Status" type="xsd:int"/>
+				  <xsd:element name="PawnId" type="xsd:int"/>
+				  <xsd:element name="Pawn" type="typens:PawnWrapper"/>
+              </xsd:all>
+            </xsd:complexType>
+			
+			<xsd:complexType name="GameWrapper">
+              <xsd:all>
+                  <xsd:element name="Id" type="xsd:int"/>
+                  <xsd:element name="OneId" type="xsd:int"/>
+                  <xsd:element name="TwoId" type="xsd:int"/>
+				  <xsd:element name="PlayerOne" type="typens:UserWrapper"/>
+				  <xsd:element name="PlayerTwo" type="typens:UserWrapper"/>
+				  <xsd:element name="WinnerId" type="xsd:int"/>
+				  <xsd:element name="Status" type="xsd:string"/>
+				  <xsd:element name="Start" type="xsd:string"/>
+				  <xsd:element name="End" type="xsd:string"/>
+				  <xsd:element name="Pawnsig" type="typens:ArrayOfPawnigWrapper"/>
+				  <xsd:element name="Turn" type="xsd:int"/>
+              </xsd:all>
+            </xsd:complexType>
+			
+			<xsd:complexType name="ArrayOfUserWrapper">
+				<xsd:complexContent mixed="false">
+				  <xsd:restriction base="soapenc:Array">
+                      <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:UserWrapper[]"/>
+                  </xsd:restriction>
+				</xsd:complexContent>
+			</xsd:complexType>
+			
+			<xsd:complexType name="ArrayOfPawnigWrapper">
+				<xsd:complexContent mixed="false">
+				  <xsd:restriction base="soapenc:Array">
+                      <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:PawnigWrapper[]"/>
+                  </xsd:restriction>
+				</xsd:complexContent>
+			</xsd:complexType>
+			
+			<xsd:complexType name="ArrayOfGameWrapper">
+				<xsd:complexContent mixed="false">
+				  <xsd:restriction base="soapenc:Array">
+                      <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:GameWrapper[]"/>
+                  </xsd:restriction>
+				</xsd:complexContent>
+			</xsd:complexType>
+			
+		</xsd:schema>
+	</types>
+	
+	<message name="UserLoginInput">
+		<part name="credentials" type="typens:UserCredentials"/>
+	</message>
+	<message name="UserLoginOutput">
+		<part name="result" type="xsd:int"/>
+	</message>
+	
+	<message name="UserLogoutInput"></message>
+	<message name="UserLogoutOutput"></message>
+	
+	<message name="QuitGameInput"></message>
+	<message name="QuitGameOutput"></message>
+	
+	<message name="GetOnlineUsersInput"></message>
+    <message name="GetOnlineUsersOutput">
+        <part name="result" type="typens:ArrayOfUserWrapper"/>
+    </message>
+	
+	<message name="GetOpenGamesInput"></message>
+    <message name="GetOpenGamesOutput">
+		<part name="result" type="typens:ArrayOfGameWrapper" />
+	</message>
+	
+	<message name="JoinGameInput">
+		<part name="gameId" type="xsd:int"/>
+	</message>
+	<message name="JoinGameOutput">
+		<part name="result" type="xsd:boolean"/>
+	</message>
+	
+	<message name="CreateGameInput"></message>
+	<message name="CreateGameOutput">
+		<part name="result" type="xsd:boolean"/>
+	</message>
+	
+	<message name="ConfirmIdleInput"></message>
+	<message name="ConfirmIdleOutput">
+		<part name="result" type="xsd:boolean"/>
+	</message>
+	
+	<message name="GetCurrentGameInput"></message>
+	<message name="GetCurrentGameOutput">
+		<part name="result" type="typens:GameWrapper"/>
+	</message>
+	
+	<message name="MovePawnInput">
+		<part name="pawnId" type="xsd:int"/>
+		<part name="x" type="xsd:int"/>
+		<part name="y" type="xsd:int"/>
+	</message>
+	<message name="MovePawnOutput">
+		<part name="result" type="xsd:boolean"/>
+	</message>
+	
+    <portType name="OshiPortType">
+		
+		<operation name="GetOnlineUsers" >
+           <input message="typens:GetOnlineUsersInput"/>
+           <output message="typens:GetOnlineUsersOutput"/>
+        </operation>
+		
+		<operation name="UserLogin" parameterOrder="credentials" >
+           <input message="typens:UserLoginInput"/>
+           <output message="typens:UserLoginOutput"/>
+        </operation>
+		
+		<operation name="UserLogout" >
+           <input message="typens:UserLogoutInput"/>
+           <output message="typens:UserLogoutOutput"/>
+        </operation>
+		
+		<operation name="QuitGame" >
+           <input message="typens:QuitGameInput"/>
+           <output message="typens:QuitGameOutput"/>
+        </operation>
+		
+		<operation name="GetOpenGames" >
+           <input message="typens:GetOpenGamesInput"/>
+           <output message="typens:GetOpenGamesOutput"/>
+        </operation>
+		
+		<operation name="JoinGame" >
+           <input message="typens:JoinGameInput"/>
+           <output message="typens:JoinGameOutput"/>
+        </operation>
+		
+		<operation name="CreateGame" >
+           <input message="typens:CreateGameInput"/>
+           <output message="typens:CreateGameOutput"/>
+        </operation>
+		
+		<operation name="ConfirmIdle" >
+           <input message="typens:GetCurrentGameInput"/>
+           <output message="typens:ConfirmIdleOutput"/>
+        </operation>
+		
+		<operation name="GetCurrentGame" >
+           <input message="typens:GetCurrentGameInput"/>
+           <output message="typens:GetCurrentGameOutput"/>
+        </operation>
+		
+		<operation name="MovePawn" >
+           <input message="typens:MovePawnInput"/>
+           <output message="typens:MovePawnOutput"/>
+        </operation>
+		
+    </portType>
+	
+    <binding name="OshiSoapBinding" type="typens:OshiPortType">
+	
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+		
+		<operation name="GetOnlineUsers">
+           <soap:operation soapAction="urn:OshiAction" style="rpc"/>
+           <input>
+               <soap:body use="encoded" namespace="urn:Oshi"
+                          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+           </input>
+           <output>
+               <soap:body use="encoded" namespace="urn:Oshi"
+                          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+           </output>
+        </operation>
+		
+		<operation name="UserLogin">
+           <soap:operation soapAction="urn:OshiAction"/>
+           <input>
+               <soap:body use="encoded" namespace="urn:Oshi"
+                          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+           </input>
+           <output>
+               <soap:body use="encoded" namespace="urn:Oshi"
+                          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+           </output>
+        </operation>
+		
+		<operation name="UserLogout">
+           <soap:operation soapAction="urn:OshiAction"/>
+           <input>
+               <soap:body use="encoded" namespace="urn:Oshi"
+                          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+           </input>
+           <output>
+               <soap:body use="encoded" namespace="urn:Oshi"
+                          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+           </output>
+        </operation>
+		
+		<operation name="QuitGame">
+           <soap:operation soapAction="urn:OshiAction"/>
+           <input>
+               <soap:body use="encoded" namespace="urn:Oshi"
+                          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+           </input>
+           <output>
+               <soap:body use="encoded" namespace="urn:Oshi"
+                          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+           </output>
+        </operation>
+		
+		<operation name="GetOpenGames">
+           <soap:operation soapAction="urn:OshiAction"/>
+           <input>
+               <soap:body use="encoded" namespace="urn:Oshi"
+                          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+           </input>
+           <output>
+               <soap:body use="encoded" namespace="urn:Oshi"
+                          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+           </output>
+        </operation>
+		
+		<operation name="JoinGame">
+           <soap:operation soapAction="urn:OshiAction"/>
+           <input>
+               <soap:body use="encoded" namespace="urn:Oshi"
+                          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+           </input>
+           <output>
+               <soap:body use="encoded" namespace="urn:Oshi"
+                          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+           </output>
+        </operation>
+		
+		<operation name="CreateGame">
+           <soap:operation soapAction="urn:OshiAction"/>
+           <input>
+               <soap:body use="encoded" namespace="urn:Oshi"
+                          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+           </input>
+           <output>
+               <soap:body use="encoded" namespace="urn:Oshi"
+                          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+           </output>
+        </operation>
+
+		<operation name="ConfirmIdle">
+           <soap:operation soapAction="urn:OshiAction"/>
+           <input>
+               <soap:body use="encoded" namespace="urn:Oshi"
+                          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+           </input>
+           <output>
+               <soap:body use="encoded" namespace="urn:Oshi"
+                          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+           </output>
+        </operation>
+
+		<operation name="GetCurrentGame">
+           <soap:operation soapAction="urn:OshiAction"/>
+           <input>
+               <soap:body use="encoded" namespace="urn:Oshi"
+                          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+           </input>
+           <output>
+               <soap:body use="encoded" namespace="urn:Oshi"
+                          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+           </output>
+        </operation>
+
+		<operation name="MovePawn">
+           <soap:operation soapAction="urn:OshiAction"/>
+           <input>
+               <soap:body use="encoded" namespace="urn:Oshi"
+                          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+           </input>
+           <output>
+               <soap:body use="encoded" namespace="urn:Oshi"
+                          encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+           </output>
+        </operation>		
+    </binding>
+	
+    <service name="OshiService">
+        <port name="OshiPort" binding="typens:OshiSoapBinding">
+           <soap:address location="http://lostkingdom.net/server.php"/>
+        </port>
+    </service>
+	
+</definitions>
