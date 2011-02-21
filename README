@@ -15,9 +15,7 @@ rather than a real class.
 
 Clients:
 
-All compatible clients should be able to recieve
-and send cookies in order to be compatible with
-this SOAP service.
+All compatible clients should support cookies
 
 Wrapper Classes:
 
