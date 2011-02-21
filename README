@@ -1,6 +1,9 @@
 Lots of things to add, rewrite and improve here.
 Has been tested with a simple .net client, soon to be linked here.
 
+Todo list:
+* Replace session authentication with oAuth.
+
 ///////////////
 //   NOTES   //
 ///////////////
